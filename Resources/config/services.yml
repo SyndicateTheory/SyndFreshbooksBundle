@@ -1,0 +1,40 @@
+parameters:
+    synd_freshbooks.auth.api_url: "X"
+    synd_freshbooks.auth.auth_token: "hash"
+    synd_freshbooks.xml.serializer_class: Symfony\Component\Serializer\Serializer
+    synd_freshbooks.xml.encoder_class: Symfony\Component\Serializer\Encoder\XmlEncoder
+
+services:
+    synd_freshbooks.entity_manager:
+        class: Synd\FreshbooksBundle\ORM\EntityManager
+        arguments:
+            - @synd_freshbooks.service
+
+    synd_freshbooks.service:
+        class: Synd\FreshbooksBundle\Service\Freshbooks
+        arguments:
+            - @buzz
+            - @synd_freshbooks.xml.serializer
+            - %synd_freshbooks.auth.api_url%
+            - %synd_freshbooks.auth.api_token%
+
+    synd_freshbooks.api.client
+        class: Synd\FreshbooksBundle\Service\Call\ClientCall
+        arguments:
+            - @synd_freshbooks_service
+            
+    synd_freshbooks.api.invoice
+        class: Synd\FreshbooksBundle\Service\Call\InvoiceCall
+        arguments:
+            - @synd_freshbooks_service
+
+    synd_freshbooks.xml.serializer:
+        class: %synd_freshbooks.xml.serializer_class%
+        arguments:
+            - []
+            - [ @synd_freshbooks.xml.encoder ]
+            
+    synd_freshbooks.xml.encoder:
+        class: %synd_freshbooks.xml.encoder_class%
+        calls:
+            - [ setRootNodeName, [ request ]]
