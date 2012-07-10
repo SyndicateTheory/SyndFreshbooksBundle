@@ -1,0 +1,19 @@
+{
+    "name": "syndicatetheory/freshbooks-bundle",
+    "type": "symfony-bundle",
+    "description": "[IN DEVELOPMENT] Symfony2 Freshbooks API Bundle",
+    "authors": [
+        {
+            "name": "Adrian Schneider",
+            "email": "adrian@syndicatetheory.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "autoload": {
+        "psr-0": { "Synd\\FreshbooksBundle": "" }
+    },
+    "target-dir": "Synd/FreshbooksBundle"
+}
+    
