@@ -2,11 +2,14 @@
 
 namespace Synd\FreshbooksBundle\EventListener;
 
+use Synd\FreshbooksBundle\ORM\EntityManager as FreshbooksEntityManager;
+use Synd\FreshbooksBundle\Serializer\SerializableEntityInterface;
+
 class UpdateFreshbooks
 {
     protected $freshbooks;
     
-    public function __construct(Freshbooks $fresshbooks)
+    public function __construct(FreshbooksEntityManager $fresshbooks)
     {
         $this->freshbooks = $freshbooks;
     }
@@ -17,11 +20,15 @@ class UpdateFreshbooks
         $uow = $em->getUnitOfWork();
         
         foreach ($uow->getScheduledEntityInsertions() as $entity) {
-            $this->freshbooks->persist($entity);
+            if ($entity instanceof SerializableEntityInterface) {
+                $this->freshbooks->persist($entity);
+            }
         }
         
         foreach ($uow->getScheduledEntityUpdatesS() as $entity) {
-            $this->freshbooks->persist($entity);
+            if ($entity instanceof SerializableEntityInterface) {
+                $this->freshbooks->persist($entity);
+            }
         }
     }
 }
